@@ -25,4 +25,15 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
+function addProductToCart(product) {
+  // 1. Pegar carrinho atual (ou array vazio se não existir)
+  let cart = getLocalStorage("so-cart") || [];
+  
+  // 2. Adicionar novo produto
+  cart.push(product);
+  
+  // 3. Salvar carrinho completo
+  setLocalStorage("so-cart", cart);
+}
+
 renderCartContents();
