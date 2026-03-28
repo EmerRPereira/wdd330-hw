@@ -474,3 +474,112 @@ footer {
   background-color: var(--light-grey);
   margin-top: 2rem;
 }
+
+/* Categories section - melhorado para 4 itens lado a lado */
+.categories {
+    margin: 2rem auto;
+    padding: 1rem;
+    text-align: center;
+    max-width: 1200px;
+}
+
+.categories h2 {
+    margin-bottom: 2rem;
+    font-family: var(--font-headline);
+    font-size: 1.8rem;
+    color: var(--dark-grey);
+}
+
+.category-list {
+    display: flex;
+    flex-flow: row wrap;
+    list-style-type: none;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 0;
+}
+
+.category-card {
+    flex: 1 1 200px;
+    max-width: 220px;
+    min-width: 160px;
+    text-align: center;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+    border-radius: 8px;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.category-card a {
+    text-decoration: none;
+    color: var(--dark-grey);
+    display: block;
+}
+
+.category-card img {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1rem auto;
+    display: block;
+    transition: opacity 0.3s ease;
+}
+
+.category-card:hover img {
+    opacity: 0.8;
+}
+
+.category-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--secondary-color);
+}
+
+/* Responsividade para telas menores */
+@media screen and (max-width: 768px) {
+    .category-list {
+        gap: 1rem;
+    }
+    
+    .category-card {
+        flex: 1 1 160px;
+        min-width: 140px;
+    }
+    
+    .category-card img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .category-card h3 {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .category-list {
+        gap: 0.75rem;
+    }
+    
+    .category-card {
+        flex: 1 1 140px;
+        min-width: 120px;
+        padding: 0.75rem;
+    }
+    
+    .category-card img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .category-card h3 {
+        font-size: 0.9rem;
+    }
+}
