@@ -1,99 +1,98 @@
-
-/*
-// wrapper for querySelector...returns matching element
-export function qs(selector, parent = document) {
-  return parent.querySelector(selector);
-}
-// or a more concise version if you are into that sort of thing:
-// export const qs = (selector, parent = document) => parent.querySelector(selector);
-
-// retrieve data from localstorage
+// Funções de localStorage
 export function getLocalStorage(key) {
-  return JSON.parse(localStorage.getItem(key));
+    return JSON.parse(localStorage.getItem(key));
 }
-// save data to local storage
+
 export function setLocalStorage(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
-// set a listener for both touchend and click
-export function setClick(selector, callback) {
-  qs(selector).addEventListener("touchend", (event) => {
-    event.preventDefault();
-    callback();
-  });
-  qs(selector).addEventListener("click", callback);
-}
-*/
-
-// utils.mjs
-export function renderListWithTemplate(
-  templateFn,
-  parentElement,
-  list,
-  position = "afterbegin",
-  clear = false
-) {
-  if (clear) {
-    parentElement.innerHTML = "";
-  }
-  const htmlStrings = list.map(templateFn);
-  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+    localStorage.setItem(key, JSON.stringify(data));
 }
 
-// Other utility functions you might have...
-export function qs(selector, parent = document) {
-  return parent.querySelector(selector);
+// Função para carregar templates
+export async function loadTemplate(path) {
+    const res = await fetch(path);
+    const template = await res.text();
+    return template;
 }
 
-export function getParam(param) {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  return urlParams.get(param);
+// Função para carregar header e footer
+export async function loadHeaderFooter() {
+    try {
+        const headerTemplate = await loadTemplate('/partials/header.html');
+        const headerElement = document.querySelector('#main-header');
+        if (headerElement) {
+            headerElement.innerHTML = headerTemplate;
+            updateCartCount();
+        }
+        
+        const footerTemplate = await loadTemplate('/partials/footer.html');
+        const footerElement = document.querySelector('#main-footer');
+        if (footerElement) {
+            footerElement.innerHTML = footerTemplate;
+        }
+    } catch (error) {
+        console.error('Error loading header/footer:', error);
+    }
 }
 
-// src/js/utils.mjs
+// Função para atualizar contador do carrinho
+export function updateCartCount() {
+    const cartItems = getLocalStorage('so-cart') || [];
+    const cartCount = cartItems.length;
+    const cartLink = document.querySelector('.cart a');
+    if (cartLink) {
+        let badge = cartLink.querySelector('.cart-badge');
+        if (cartCount > 0) {
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'cart-badge';
+                cartLink.appendChild(badge);
+            }
+            badge.textContent = cartCount;
+        } else if (badge) {
+            badge.remove();
+        }
+    }
+}
 
-// ... (other utility functions)
-
+// FUNÇÃO DE ALERTA
 export function alertMessage(message, scroll = true) {
-  // Create a div to hold the alert
-  const alert = document.createElement('div');
-  alert.classList.add('alert');
-  
-  // Set the content with a close button (X)
-  alert.innerHTML = `
-    <p>${message}</p>
-    <button class="alert-close-btn">&times;</button>
-  `;
-  
-  // Add an event listener to remove the alert when the close button is clicked
-  alert.addEventListener('click', (e) => {
-    if (e.target.classList.contains('alert-close-btn')) {
-      const main = document.querySelector('main');
-      if (main && main.contains(alert)) {
-        main.removeChild(alert);
-      }
+    const alert = document.createElement('div');
+    alert.classList.add('alert');
+    alert.innerHTML = `
+        <p>${message}</p>
+        <button class="alert-close-btn">&times;</button>
+    `;
+    
+    alert.addEventListener('click', (e) => {
+        if (e.target.classList.contains('alert-close-btn')) {
+            const main = document.querySelector('main');
+            if (main && main.contains(alert)) {
+                main.removeChild(alert);
+            }
+        }
+    });
+    
+    const main = document.querySelector('main');
+    if (main) {
+        main.prepend(alert);
     }
-  });
-  
-  // Optionally auto-remove the alert after 5 seconds
-  setTimeout(() => {
-    if (document.body.contains(alert)) {
-      alert.remove();
+    
+    if (scroll) {
+        window.scrollTo(0, 0);
     }
-  }, 5000);
-  
-  // Insert the alert at the top of the main element
-  const main = document.querySelector('main');
-  if (main) {
-    main.prepend(alert);
-  } else {
-    // Fallback if there's no <main> tag (should not happen on the checkout page)
-    document.body.prepend(alert);
-  }
-  
-  // Scroll to the top to ensure the user sees the alert
-  if (scroll) {
-    window.scrollTo(0, 0);
-  }
+    
+    setTimeout(() => {
+        if (document.body.contains(alert)) {
+            alert.remove();
+        }
+    }, 5000);
+}
+
+// Função para renderizar listas
+export function renderListWithTemplate(templateFn, parentElement, list, position = 'afterbegin', clear = true) {
+    if (clear) {
+        parentElement.innerHTML = '';
+    }
+    const htmlString = list.map(templateFn).join('');
+    parentElement.insertAdjacentHTML(position, htmlString);
 }
