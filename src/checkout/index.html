@@ -60,6 +60,25 @@
       <section class="products">
         <h2>Review & Place your Order</h2>
       </section>
+
+      <!-- In src/checkout/index.html -->
+      <form id="checkout-form">
+        <!-- Shipping Information -->
+        <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+        <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+        <input type="text" id="street" name="street" placeholder="Street Address" required>
+        <input type="text" id="city" name="city" placeholder="City" required>
+        <input type="text" id="state" name="state" placeholder="State" required>
+        <input type="text" id="zip" name="zip" placeholder="Zip Code" required>
+        
+        <!-- Payment Information -->
+        <input type="text" id="cardNumber" name="cardNumber" placeholder="Card Number" required>
+        <input type="text" id="expiration" name="expiration" placeholder="Expiration (MM/YY)" required>
+        <input type="text" id="securityCode" name="securityCode" placeholder="Security Code" required>
+        
+        <button id="checkoutSubmit" type="button">Place Order</button>
+      </form>
+
     </main>
 
     <footer>&copy;NOT a real business</footer>
