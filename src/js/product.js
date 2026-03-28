@@ -16,3 +16,4 @@ function addProductToCart(product) {
 document
   .getElementById("addToCart")
   .addEventListener("click", addToCartHandler);
+}
