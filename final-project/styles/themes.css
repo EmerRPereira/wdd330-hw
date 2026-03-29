@@ -1,0 +1,59 @@
+/* Dark Mode Styles */
+body.dark-mode {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+body.dark-mode .card,
+body.dark-mode .flashcard {
+    background: var(--card-dark);
+}
+
+body.dark-mode .search-input {
+    background: var(--card-dark);
+    color: var(--text-dark);
+    border-color: var(--border-dark);
+}
+
+body.dark-mode .history-item {
+    background: var(--card-dark);
+    color: var(--text-dark);
+    border-color: var(--border-dark);
+}
+
+body.dark-mode .history-item:hover {
+    background: var(--primary);
+    color: white;
+}
+
+body.dark-mode .definition-text {
+    color: var(--text-dark);
+}
+
+body.dark-mode .bottom-nav {
+    background: var(--card-dark);
+    border-top-color: var(--border-dark);
+}
+
+body.dark-mode .nav-item {
+    color: var(--text-dark);
+}
+
+body.dark-mode .library-card {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+}
+
+body.dark-mode .review-card {
+    background: var(--card-dark);
+}
+
+body.dark-mode .stats-card {
+    background: var(--card-dark);
+}
+
+body.dark-mode footer {
+    background: var(--card-dark);
+    border-top-color: var(--border-dark);
+    color: var(--text-dark);
+}
