@@ -1,0 +1,64 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #4A90E2;
+    --secondary: #50E3C2;
+    --accent: #F5A623;
+    --success: #27AE60;
+    --error: #E74C3C;
+    --bg-light: #FFFFFF;
+    --text-light: #2C3E50;
+    --card-light: #F8F9FA;
+    --border-light: #E0E0E0;
+    --bg-dark: #1A1A2E;
+    --text-dark: #ECF0F1;
+    --card-dark: #2D2D44;
+    --border-dark: #444;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--bg-light);
+    color: var(--text-light);
+    transition: all 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Lists */
+ul, ol {
+    list-style: none;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Buttons */
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
