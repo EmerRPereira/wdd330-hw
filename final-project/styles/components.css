@@ -389,3 +389,30 @@
         opacity: 1;
     }
 }
+
+/* Image error handling */
+.flashcard-image {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.flashcard-image[src*="placeholder"],
+.flashcard-image[src*="No+Image"] {
+    object-fit: contain;
+    background: #f0f0f0;
+}
+
+.image-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #f0f0f0;
+}
+
+.image-option img[src*="placeholder"],
+.image-option img[src*="No+Image"] {
+    object-fit: contain;
+    padding: 10px;
+}
