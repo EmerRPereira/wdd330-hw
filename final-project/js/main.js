@@ -112,14 +112,25 @@ async function searchWord() {
     showLoading(flashcardContainer);
     
     try {
+        // Primeiro busca definição
         const definition = await fetchDefinition(word);
         if (!definition) {
             showToast(MESSAGES[currentLanguage]?.wordNotFound || MESSAGES.en.wordNotFound, 'error');
+            flashcardContainer.innerHTML = ''; // Limpar loading
             return;
         }
 
-        const images = await fetchImages(word);
-        const selectedImage = images[0] || 'https://via.placeholder.com/400x300?text=No+Image+Available';
+        // Depois busca imagens (não travar se falhar)
+        let images = [];
+        try {
+            images = await fetchImages(word);
+            console.log('Images fetched:', images);
+        } catch (imgError) {
+            console.warn('Image fetch failed, continuing without images:', imgError);
+            images = [];
+        }
+
+        const selectedImage = images.length > 0 ? images[0] : null;
 
         renderFlashcard(definition, images, selectedImage);
         addToSearchHistory(word, searchHistory, saveData, updateSearchHistoryUI);
@@ -127,6 +138,7 @@ async function searchWord() {
     } catch (error) {
         console.error('Search error:', error);
         showToast('Error searching word. Please try again.', 'error');
+        flashcardContainer.innerHTML = '';
     }
 }
 
