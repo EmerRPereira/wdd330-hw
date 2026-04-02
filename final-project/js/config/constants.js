@@ -2,6 +2,9 @@
 export const PIXABAY_API_KEY = '48920990-b57e343c58243a08514cf86b2';
 export const DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
 
+// Placeholder Image (URL confiável)
+export const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400/4A90E2/white?text=No+Image+Available';
+
 // LocalStorage Keys
 export const STORAGE_KEYS = {
     LIBRARY: 'vocabulary_library',
