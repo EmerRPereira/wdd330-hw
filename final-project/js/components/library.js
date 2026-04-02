@@ -1,5 +1,8 @@
 import { speakWord } from '../services/speech.js';
 import { truncateText } from '../utils/helpers.js';
+import { PLACEHOLDER_IMAGE } from '../config/constants.js';
+import { speakWord } from '../services/speech.js';
+import { truncateText } from '../utils/helpers.js';
 
 let library = [];
 let onRemoveCallback = null;
