@@ -1,6 +1,7 @@
 import { speakWord } from '../services/speech.js';
 import { showToast } from '../utils/helpers.js';
 import { MESSAGES } from '../config/constants.js';
+import { PLACEHOLDER_IMAGE } from '../config/constants.js';
 
 let currentWord = null;
 let currentImages = [];
@@ -20,7 +21,7 @@ export function getSelectedImageUrl() {
 }
 
 export function selectImage(index) {
-    if (currentImages[index]) {
+    if (currentImages && currentImages[index]) {
         selectedImageUrl = currentImages[index];
         renderFlashcard(currentWord, currentImages, selectedImageUrl);
     }
@@ -28,29 +29,39 @@ export function selectImage(index) {
 
 export function renderFlashcard(wordData, images, selectedImage) {
     currentWord = wordData;
-    currentImages = images;
-    selectedImageUrl = selectedImage;
+    currentImages = images || [];
+    
+    // Garantir que selectedImage seja uma string válida
+    if (!selectedImage || selectedImage === 'undefined') {
+        selectedImageUrl = currentImages[0] || PLACEHOLDER_IMAGE;
+    } else {
+        selectedImageUrl = selectedImage;
+    }
+    
+    // Se não há imagens, mostrar placeholder
+    const displayImages = currentImages.length > 0 ? currentImages : [PLACEHOLDER_IMAGE];
+    const displaySelectedImage = selectedImageUrl || displayImages[0];
     
     const flashcardHtml = `
-        <img src="${selectedImage}" alt="${wordData.word}" class="flashcard-image">
+        <img src="${displaySelectedImage}" alt="${wordData.word}" class="flashcard-image" onerror="this.src='${PLACEHOLDER_IMAGE}'">
         <div class="flashcard-content">
             <div class="word-section">
-                <h2 class="word">${wordData.word}</h2>
+                <h2 class="word">${escapeHtml(wordData.word)}</h2>
                 <div class="phonetic">${wordData.phonetic || ''}</div>
                 <button id="speakBtn" class="pronounce-btn">
                     <i class="fas fa-volume-up"></i>
                 </button>
             </div>
             <div class="definition-section">
-                <p class="definition-text">${wordData.definition}</p>
+                <p class="definition-text">${escapeHtml(wordData.definition)}</p>
             </div>
             <div class="example-section">
-                <i class="fas fa-quote-left"></i> "${wordData.example}"
+                <i class="fas fa-quote-left"></i> "${escapeHtml(wordData.example || 'No example available.')}"
             </div>
             <div class="image-options">
-                ${images.map((img, idx) => `
-                    <div class="image-option ${selectedImage === img ? 'selected' : ''}" onclick="window.selectImageHandler(${idx})">
-                        <img src="${img}" alt="Option ${idx + 1}">
+                ${displayImages.map((img, idx) => `
+                    <div class="image-option ${displaySelectedImage === img ? 'selected' : ''}" onclick="window.selectImageHandler(${idx})">
+                        <img src="${img}" alt="Option ${idx + 1}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
                     </div>
                 `).join('')}
             </div>
@@ -69,11 +80,15 @@ export function renderFlashcard(wordData, images, selectedImage) {
     if (flashcardContainer) {
         flashcardContainer.innerHTML = flashcardHtml;
         
-        document.getElementById('speakBtn')?.addEventListener('click', () => speakWord(wordData.word));
-        document.getElementById('saveCardBtn')?.addEventListener('click', () => {
+        const speakBtn = document.getElementById('speakBtn');
+        const saveBtn = document.getElementById('saveCardBtn');
+        const newBtn = document.getElementById('newWordBtn');
+        
+        if (speakBtn) speakBtn.addEventListener('click', () => speakWord(wordData.word));
+        if (saveBtn) saveBtn.addEventListener('click', () => {
             if (onSaveCallback) onSaveCallback();
         });
-        document.getElementById('newWordBtn')?.addEventListener('click', () => {
+        if (newBtn) newBtn.addEventListener('click', () => {
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.value = '';
@@ -81,6 +96,14 @@ export function renderFlashcard(wordData, images, selectedImage) {
             }
         });
     }
+}
+
+// Função auxiliar para escapar HTML (segurança)
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Make selectImage available globally for inline onclick
