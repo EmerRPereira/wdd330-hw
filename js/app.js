@@ -5,7 +5,7 @@
  * with images, audio pronunciation, and flashcards
  * 
  * @version 1.0.0
- * @author Visual Vocabulary Builder
+ * @author Emerson Ronald Pereira
  * @license MIT
  * ============================================
  */
@@ -13,11 +13,11 @@
 // ============================================
 // GLOBAL STATE VARIABLES
 // ============================================
-let library = [];           // Array of saved flashcards
-let searchHistory = [];     // Array of searched words (max 5)
-let currentWordData = null; // Currently displayed word data
-let currentImages = [];      // Array of image URLs for current word
-let selectedImageUrl = '';   // Currently selected image URL
+let library = [];           
+let searchHistory = [];     
+let currentWordData = null; 
+let currentImages = [];      
+let selectedImageUrl = '';   
 
 // ============================================
 // CONSTANTS & CONFIGURATION
@@ -25,8 +25,11 @@ let selectedImageUrl = '';   // Currently selected image URL
 const DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
 const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400/4A90E2/white?text=No+Image+Available';
 
+// API de imagens que funciona sem CORS - Usando Lorem Picsum (sempre funciona)
+const IMAGE_API = 'https://picsum.photos/400/300';
+
 // ============================================
-// MESSAGES (English only)
+// MESSAGES
 // ============================================
 const MESSAGES = {
     searchPlaceholder: 'Enter a word...',
@@ -45,11 +48,6 @@ const MESSAGES = {
 // UTILITY FUNCTIONS
 // ============================================
 
-/**
- * Displays a toast notification message
- * @param {string} message - The message to display
- * @param {string} type - The type of toast ('success', 'error', 'warning')
- */
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -59,10 +57,6 @@ function showToast(message, type = 'success') {
     setTimeout(() => toast.remove(), 3000);
 }
 
-/**
- * Shows loading state in a container
- * @param {HTMLElement} container - Container to show loading in
- */
 function showLoading(container) {
     if (container) {
         container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin spinner"></i> Loading...</div>';
@@ -70,11 +64,6 @@ function showLoading(container) {
     }
 }
 
-/**
- * Escapes HTML special characters to prevent XSS attacks
- * @param {string} text - Text to escape
- * @returns {string} Escaped HTML text
- */
 function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');
@@ -82,12 +71,6 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-/**
- * Generates a fallback example sentence when API doesn't provide one
- * @param {string} word - The vocabulary word
- * @param {string} definition - The word definition
- * @returns {string} Generated example sentence
- */
 function generateExampleSentence(word, definition) {
     const templates = [
         `"${word}" is an important word to learn in English.`,
@@ -103,11 +86,6 @@ function generateExampleSentence(word, definition) {
 // API FUNCTIONS (External APIs)
 // ============================================
 
-/**
- * Fetches word definition from Free Dictionary API
- * @param {string} word - Word to look up
- * @returns {Promise<Object|null>} Word data or null if not found
- */
 async function fetchDefinition(word) {
     try {
         const response = await fetch(`${DICTIONARY_API}${word}`);
@@ -120,7 +98,6 @@ async function fetchDefinition(word) {
         const phonetic = data[0].phonetic || '';
         const partOfSpeech = meaning.partOfSpeech;
         
-        // Generate example if API doesn't provide one
         if (!example) {
             example = generateExampleSentence(word, definition);
         }
@@ -139,41 +116,34 @@ async function fetchDefinition(word) {
 }
 
 /**
- * Fetches images for a word from multiple sources
- * @param {string} word - Word to search images for
- * @returns {Promise<string[]>} Array of image URLs
+ * CORREÇÃO DAS IMAGENS - Usando múltiplas fontes que funcionam sem CORS
  */
 async function fetchImages(word) {
     const imageUrls = [];
     
-    // Method 1: Unsplash (may fail due to CORS)
-    try {
-        const unsplashUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(word)}`;
-        imageUrls.push(unsplashUrl);
-    } catch (e) {
-        console.log('Unsplash error:', e);
-    }
+    // Método 1: Lorem Picsum (sempre funciona, sem CORS)
+    // Gera uma imagem aleatória com seed baseada na palavra
+    const seed = encodeURIComponent(word).replace(/[^a-zA-Z0-9]/g, '');
+    imageUrls.push(`https://picsum.photos/seed/${seed || 'random'}/400/300`);
     
-    // Method 2: Placeholder with the word (always works)
+    // Método 2: Placehold.co com a palavra (sempre funciona)
     imageUrls.push(`https://placehold.co/600x400/4A90E2/white?text=${encodeURIComponent(word)}`);
     
-    // Method 3: Category-based placeholders (fallback)
-    const categories = ['nature', 'animal', 'food', 'color'];
-    for (let cat of categories) {
-        imageUrls.push(`https://placehold.co/600x400/50E3C2/white?text=${cat}+${encodeURIComponent(word)}`);
-    }
+    // Método 3: Imagem de categoria baseada na primeira letra
+    const categories = ['nature', 'animal', 'food', 'technology', 'people'];
+    const randomCat = categories[Math.floor(Math.random() * categories.length)];
+    imageUrls.push(`https://picsum.photos/seed/${randomCat}_${seed}/400/300`);
     
-    return imageUrls.slice(0, 5); // Return up to 5 options
+    // Método 4: Cloudimage (fallback)
+    imageUrls.push(`https://picsum.photos/400/300?grayscale&seed=${seed}`);
+    
+    return imageUrls.slice(0, 5);
 }
 
 // ============================================
 // SPEECH SYNTHESIS (Web Speech API)
 // ============================================
 
-/**
- * Speaks a word using the browser's Web Speech API
- * @param {string} word - Word to pronounce
- */
 function speakWord(word) {
     if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
@@ -252,12 +222,6 @@ function addToSearchHistory(word) {
     updateSearchHistoryUI();
 }
 
-/**
- * Renders the flashcard with word data and images
- * @param {Object} wordData - Word information
- * @param {string[]} images - Array of image URLs
- * @param {string} selectedImage - Currently selected image URL
- */
 function renderFlashcard(wordData, images, selectedImage) {
     currentWordData = wordData;
     currentImages = images || [];
@@ -366,9 +330,6 @@ window.selectImage = function(index) {
     }
 };
 
-/**
- * Searches for a word using external APIs
- */
 async function searchWord() {
     const searchInput = document.getElementById('searchInput');
     const word = searchInput?.value.trim().toLowerCase();
@@ -465,7 +426,7 @@ function clearLibrary() {
 }
 
 // ============================================
-// REVIEW SYSTEM (Spaced Repetition)
+// REVIEW SYSTEM
 // ============================================
 
 let reviewQueue = [];
@@ -552,7 +513,7 @@ function navigateTo(section) {
 }
 
 // ============================================
-// THEME MANAGEMENT (Dark/Light Mode)
+// THEME MANAGEMENT
 // ============================================
 
 function toggleTheme() {
@@ -586,18 +547,15 @@ function applyTheme() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Visual Vocabulary Builder initialized');
     
-    // Load data from localStorage
     loadLibrary();
     loadSearchHistory();
     applyTheme();
     
-    // Set placeholder text
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.placeholder = MESSAGES.searchPlaceholder;
     }
     
-    // Set up event listeners
     const searchBtn = document.getElementById('searchBtn');
     const themeToggle = document.getElementById('themeToggle');
     const clearLibraryBtn = document.getElementById('clearLibraryBtn');
@@ -615,12 +573,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reviewWrong) reviewWrong.addEventListener('click', () => reviewAnswer(false));
     if (reviewClose) reviewClose.addEventListener('click', closeReviewModal);
     
-    // Navigation event listeners
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', () => navigateTo(item.dataset.section));
     });
     
-    // Expose functions globally for inline handlers
     window.speakWord = speakWord;
     window.searchWord = searchWord;
     window.navigateTo = navigateTo;

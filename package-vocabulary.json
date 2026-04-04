@@ -1,0 +1,19 @@
+{
+  "name": "visual-vocabulary-builder",
+  "version": "1.0.0",
+  "description": "Learn English vocabulary with images, audio pronunciation, and interactive flashcards",
+  "main": "index.html",
+  "author": "Emerson Ronald Pereira",
+  "license": "MIT",
+  "keywords": [
+    "vocabulary",
+    "english",
+    "flashcards",
+    "learning",
+    "education"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EmerRPereira/visual-vocabulary-builder"
+  }
+}
