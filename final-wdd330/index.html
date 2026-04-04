@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -73,11 +72,19 @@
             color: var(--text-dark);
         }
 
+        body.dark-mode .history-item {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        body.dark-mode footer {
+            background: var(--card-dark);
+        }
+
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Header */
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             padding: 1rem 2rem;
@@ -139,7 +146,6 @@
             transform: translateY(-2px);
         }
 
-        /* Container */
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -147,7 +153,6 @@
             flex: 1;
         }
 
-        /* Search Section */
         .search-section {
             margin-bottom: 2rem;
         }
@@ -212,12 +217,6 @@
             color: white;
         }
 
-        body.dark-mode .history-item {
-            background: var(--card-dark);
-            border-color: var(--border-dark);
-        }
-
-        /* Flashcard */
         .flashcard {
             background: var(--card-light);
             border-radius: 24px;
@@ -371,7 +370,6 @@
             transform: translateY(-2px);
         }
 
-        /* Library Section */
         .library-section {
             margin-top: 2rem;
             display: none;
@@ -395,6 +393,8 @@
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 8px;
+            border: none;
+            cursor: pointer;
         }
 
         .library-grid {
@@ -456,7 +456,6 @@
             border: none;
         }
 
-        /* Profile Section */
         .profile-section {
             display: none;
             text-align: center;
@@ -480,7 +479,6 @@
             color: var(--primary);
         }
 
-        /* Bottom Navigation */
         .bottom-nav {
             background: var(--card-light);
             border-top: 1px solid var(--border-light);
@@ -521,7 +519,6 @@
             color: var(--primary);
         }
 
-        /* Review Modal */
         .review-mode {
             position: fixed;
             top: 0;
@@ -565,7 +562,6 @@
             justify-content: center;
         }
 
-        /* Loading */
         .loading {
             text-align: center;
             padding: 3rem;
@@ -582,7 +578,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 80px;
@@ -609,10 +604,6 @@
             padding: 1.5rem;
             background: var(--card-light);
             font-size: 0.85rem;
-        }
-
-        body.dark-mode footer {
-            background: var(--card-dark);
         }
 
         @media (max-width: 768px) {
@@ -662,7 +653,7 @@
         <div id="librarySection" class="library-section">
             <div class="section-title">
                 <h2><i class="fas fa-book"></i> My Library</h2>
-                <button id="clearLibraryBtn" class="btn-icon btn-danger">Clear All</button>
+                <button id="clearLibraryBtn" class="btn-danger">Clear All</button>
             </div>
             <div id="libraryGrid" class="library-grid"></div>
         </div>
@@ -706,7 +697,7 @@
 
     <script>
         // ============================================
-        // VISUAL VOCABULARY BUILDER - VERSÃO FUNCIONAL
+        // VISUAL VOCABULARY BUILDER - VERSÃO COMPLETA
         // ============================================
         
         // --- VARIÁVEIS GLOBAIS ---
@@ -721,32 +712,26 @@
         const DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
         const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400/4A90E2/white?text=No+Image+Available';
         
-        const MESSAGES = {
-            en: {
-                searchPlaceholder: 'Enter a word...',
-                wordNotFound: 'Word not found. Try another word!',
-                saveSuccess: 'Word saved to library!',
-                alreadyExists: 'This word is already in your library!',
-                removeSuccess: 'Word removed from library',
-                libraryCleared: 'Library cleared',
-                emptyLibrary: 'No words to review. Save some words first!',
-                reviewComplete: 'Review completed! Great job! 🎉',
-                correct: 'Correct! 🎯',
-                wrong: 'Keep practicing! 📚'
-            },
-            pt: {
-                searchPlaceholder: 'Digite uma palavra...',
-                wordNotFound: 'Palavra não encontrada. Tente outra palavra!',
-                saveSuccess: 'Palavra salva na biblioteca!',
-                alreadyExists: 'Esta palavra já está na sua biblioteca!',
-                removeSuccess: 'Palavra removida da biblioteca',
-                libraryCleared: 'Biblioteca limpa',
-                emptyLibrary: 'Nenhuma palavra para revisar. Salve algumas palavras primeiro!',
-                reviewComplete: 'Revisão concluída! Ótimo trabalho! 🎉',
-                correct: 'Correto! 🎯',
-                wrong: 'Continue praticando! 📚'
-            }
+        // Banco de imagens alternativas por categoria
+        const CATEGORY_IMAGES = {
+            animal: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'],
+            food: ['🍎', '🍕', '🍔', '🌮', '🥗', '🍣', '🍩', '🍪'],
+            nature: ['🌲', '🌳', '🌴', '🌵', '🌿', '🍃', '🍂', '🌸'],
+            color: ['🔴', '🔵', '🟢', '🟡', '🟠', '🟣', '⚫', '⚪'],
+            default: ['📖', '📚', '✏️', '📝', '💡', '🎯', '⭐', '💎']
         };
+        
+        // Frases de exemplo geradas dinamicamente quando a API não fornece
+        function generateExampleSentence(word, definition) {
+            const templates = [
+                `"${word}" is an important word to learn in English.`,
+                `I learned the meaning of "${word}" today.`,
+                `Can you use "${word}" in a sentence?`,
+                `The word "${word}" means: ${definition.substring(0, 50)}...`,
+                `Understanding "${word}" helps improve vocabulary.`
+            ];
+            return templates[Math.floor(Math.random() * templates.length)];
+        }
         
         // --- FUNÇÕES AUXILIARES ---
         function showToast(message, type = 'success') {
@@ -779,10 +764,15 @@
                 const data = await response.json();
                 
                 const meaning = data[0].meanings[0];
-                const definition = meaning.definitions[0].definition;
-                const example = meaning.definitions[0].example || 'No example available.';
+                let definition = meaning.definitions[0].definition;
+                let example = meaning.definitions[0].example || null;
                 const phonetic = data[0].phonetic || '';
                 const partOfSpeech = meaning.partOfSpeech;
+                
+                // Se não houver exemplo, gerar um
+                if (!example) {
+                    example = generateExampleSentence(word, definition);
+                }
                 
                 return {
                     word: data[0].word,
@@ -798,25 +788,43 @@
         }
         
         async function fetchImages(word) {
+            const imageUrls = [];
+            
+            // Método 1: Unsplash (pode falhar por CORS)
             try {
-                // Usando Unsplash Source (mais confiável e sem CORS)
-                return [`https://source.unsplash.com/400x300/?${encodeURIComponent(word)}`];
-            } catch (error) {
-                console.error('Image fetch error:', error);
-                return [];
+                const unsplashUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(word)}`;
+                imageUrls.push(unsplashUrl);
+            } catch (e) { console.log('Unsplash error:', e); }
+            
+            // Método 2: Placeholder com a palavra (sempre funciona)
+            imageUrls.push(`https://placehold.co/600x400/4A90E2/white?text=${encodeURIComponent(word)}`);
+            
+            // Método 3: Imagem baseada em categoria (fallback)
+            const categories = ['nature', 'animal', 'food', 'color'];
+            for (let cat of categories) {
+                imageUrls.push(`https://placehold.co/600x400/50E3C2/white?text=${cat}+${encodeURIComponent(word)}`);
             }
+            
+            return imageUrls.slice(0, 5); // Retorna até 5 opções
         }
         
         // --- SPEECH ---
         function speakWord(word) {
             if ('speechSynthesis' in window) {
+                // Cancela qualquer fala anterior
+                speechSynthesis.cancel();
+                
                 const utterance = new SpeechSynthesisUtterance(word);
                 utterance.lang = 'en-US';
                 utterance.rate = 0.9;
-                speechSynthesis.cancel();
-                speechSynthesis.speak(utterance);
+                utterance.pitch = 1;
+                
+                // Aguarda um pouco para garantir que o cancelamento foi processado
+                setTimeout(() => {
+                    speechSynthesis.speak(utterance);
+                }, 100);
             } else {
-                showToast('Speech not supported', 'error');
+                showToast('Speech not supported in this browser', 'error');
             }
         }
         
@@ -928,11 +936,16 @@
             flashcardContainer.innerHTML = flashcardHtml;
             flashcardContainer.classList.add('active');
             
-            document.getElementById('speakBtn')?.addEventListener('click', () => speakWord(wordData.word));
-            document.getElementById('saveCardBtn')?.addEventListener('click', saveToLibrary);
-            document.getElementById('newWordBtn')?.addEventListener('click', () => {
+            const speakBtn = document.getElementById('speakBtn');
+            const saveBtn = document.getElementById('saveCardBtn');
+            const newBtn = document.getElementById('newWordBtn');
+            
+            if (speakBtn) speakBtn.addEventListener('click', () => speakWord(wordData.word));
+            if (saveBtn) saveBtn.addEventListener('click', saveToLibrary);
+            if (newBtn) newBtn.addEventListener('click', () => {
                 document.getElementById('searchInput').value = '';
                 document.getElementById('searchInput').focus();
+                flashcardContainer.classList.remove('active');
             });
         }
         
@@ -998,7 +1011,7 @@
             try {
                 const definition = await fetchDefinition(word);
                 if (!definition) {
-                    showToast(MESSAGES[currentLanguage]?.wordNotFound || MESSAGES.en.wordNotFound, 'error');
+                    showToast(MESSAGES[currentLanguage]?.wordNotFound || 'Word not found. Try another word!', 'error');
                     flashcardContainer.innerHTML = '';
                     flashcardContainer.classList.remove('active');
                     return;
@@ -1026,7 +1039,7 @@
             
             const exists = library.some(item => item.word === currentWordData.word);
             if (exists) {
-                showToast(MESSAGES[currentLanguage]?.alreadyExists || MESSAGES.en.alreadyExists, 'warning');
+                showToast(MESSAGES[currentLanguage]?.alreadyExists || 'This word is already in your library!', 'warning');
                 return;
             }
             
@@ -1046,7 +1059,7 @@
             saveLibrary();
             renderLibrary();
             updateProfileStats();
-            showToast(MESSAGES[currentLanguage]?.saveSuccess || MESSAGES.en.saveSuccess, 'success');
+            showToast(MESSAGES[currentLanguage]?.saveSuccess || 'Word saved to library!', 'success');
         }
         
         window.removeFromLibrary = function(id) {
@@ -1054,7 +1067,7 @@
             saveLibrary();
             renderLibrary();
             updateProfileStats();
-            showToast(MESSAGES[currentLanguage]?.removeSuccess || MESSAGES.en.removeSuccess, 'success');
+            showToast(MESSAGES[currentLanguage]?.removeSuccess || 'Word removed from library', 'success');
         };
         
         window.viewWord = async function(word) {
@@ -1074,7 +1087,7 @@
                 saveLibrary();
                 renderLibrary();
                 updateProfileStats();
-                showToast(MESSAGES[currentLanguage]?.libraryCleared || MESSAGES.en.libraryCleared, 'success');
+                showToast(MESSAGES[currentLanguage]?.libraryCleared || 'Library cleared', 'success');
             }
         }
         
@@ -1084,7 +1097,7 @@
         
         function startReview() {
             if (library.length === 0) {
-                showToast(MESSAGES[currentLanguage]?.emptyLibrary || MESSAGES.en.emptyLibrary, 'warning');
+                showToast(MESSAGES[currentLanguage]?.emptyLibrary || 'No words to review. Save some words first!', 'warning');
                 return;
             }
             
@@ -1096,7 +1109,7 @@
         function showNextReview() {
             if (reviewIndex >= reviewQueue.length) {
                 closeReviewModal();
-                showToast(MESSAGES[currentLanguage]?.reviewComplete || MESSAGES.en.reviewComplete, 'success');
+                showToast(MESSAGES[currentLanguage]?.reviewComplete || 'Review completed! Great job! 🎉', 'success');
                 updateProfileStats();
                 return;
             }
@@ -1116,9 +1129,9 @@
                 const index = library.findIndex(item => item.id === card.id);
                 if (index !== -1) library[index] = card;
                 saveLibrary();
-                showToast(MESSAGES[currentLanguage]?.correct || MESSAGES.en.correct, 'success');
+                showToast(MESSAGES[currentLanguage]?.correct || 'Correct! 🎯', 'success');
             } else {
-                showToast(MESSAGES[currentLanguage]?.wrong || MESSAGES.en.wrong, 'warning');
+                showToast(MESSAGES[currentLanguage]?.wrong || 'Keep practicing! 📚', 'warning');
                 reviewQueue.push(card);
             }
             
@@ -1132,6 +1145,34 @@
             reviewIndex = 0;
         }
         
+        // --- MENSAGENS POR IDIOMA ---
+        const MESSAGES = {
+            en: {
+                searchPlaceholder: 'Enter a word...',
+                wordNotFound: 'Word not found. Try another word!',
+                saveSuccess: 'Word saved to library!',
+                alreadyExists: 'This word is already in your library!',
+                removeSuccess: 'Word removed from library',
+                libraryCleared: 'Library cleared',
+                emptyLibrary: 'No words to review. Save some words first!',
+                reviewComplete: 'Review completed! Great job! 🎉',
+                correct: 'Correct! 🎯',
+                wrong: 'Keep practicing! 📚'
+            },
+            pt: {
+                searchPlaceholder: 'Digite uma palavra...',
+                wordNotFound: 'Palavra não encontrada. Tente outra palavra!',
+                saveSuccess: 'Palavra salva na biblioteca!',
+                alreadyExists: 'Esta palavra já está na sua biblioteca!',
+                removeSuccess: 'Palavra removida da biblioteca',
+                libraryCleared: 'Biblioteca limpa',
+                emptyLibrary: 'Nenhuma palavra para revisar. Salve algumas palavras primeiro!',
+                reviewComplete: 'Revisão concluída! Ótimo trabalho! 🎉',
+                correct: 'Correto! 🎯',
+                wrong: 'Continue praticando! 📚'
+            }
+        };
+        
         // --- NAVEGAÇÃO ---
         function navigateTo(section) {
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -1144,7 +1185,13 @@
             const librarySection = document.getElementById('librarySection');
             const profileSection = document.getElementById('profileSection');
             
-            if (flashcard) flashcard.style.display = section === 'home' ? 'block' : 'none';
+            if (flashcard) {
+                if (section === 'home') {
+                    flashcard.style.display = 'block';
+                } else {
+                    flashcard.style.display = 'none';
+                }
+            }
             if (librarySection) librarySection.classList.toggle('active', section === 'library');
             if (profileSection) profileSection.classList.toggle('active', section === 'profile');
             
@@ -1188,7 +1235,7 @@
         function applyLanguage() {
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
-                searchInput.placeholder = MESSAGES[currentLanguage]?.searchPlaceholder || MESSAGES.en.searchPlaceholder;
+                searchInput.placeholder = MESSAGES[currentLanguage]?.searchPlaceholder || 'Enter a word...';
             }
         }
         
@@ -1202,19 +1249,28 @@
             applyTheme();
             applyLanguage();
             
-            document.getElementById('languageSelect').value = currentLanguage;
+            const langSelect = document.getElementById('languageSelect');
+            if (langSelect) langSelect.value = currentLanguage;
             
-            document.getElementById('searchBtn').addEventListener('click', searchWord);
-            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            const searchBtn = document.getElementById('searchBtn');
+            const searchInput = document.getElementById('searchInput');
+            const themeToggle = document.getElementById('themeToggle');
+            const languageSelect = document.getElementById('languageSelect');
+            const clearLibraryBtn = document.getElementById('clearLibraryBtn');
+            const reviewCorrect = document.getElementById('reviewCorrect');
+            const reviewWrong = document.getElementById('reviewWrong');
+            const reviewClose = document.getElementById('reviewClose');
+            
+            if (searchBtn) searchBtn.addEventListener('click', searchWord);
+            if (searchInput) searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') searchWord();
             });
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-            document.getElementById('languageSelect').addEventListener('change', changeLanguage);
-            document.getElementById('clearLibraryBtn').addEventListener('click', clearLibrary);
-            
-            document.getElementById('reviewCorrect').addEventListener('click', () => reviewAnswer(true));
-            document.getElementById('reviewWrong').addEventListener('click', () => reviewAnswer(false));
-            document.getElementById('reviewClose').addEventListener('click', closeReviewModal);
+            if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+            if (languageSelect) languageSelect.addEventListener('change', changeLanguage);
+            if (clearLibraryBtn) clearLibraryBtn.addEventListener('click', clearLibrary);
+            if (reviewCorrect) reviewCorrect.addEventListener('click', () => reviewAnswer(true));
+            if (reviewWrong) reviewWrong.addEventListener('click', () => reviewAnswer(false));
+            if (reviewClose) reviewClose.addEventListener('click', closeReviewModal);
             
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => navigateTo(item.dataset.section));
