@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Visual Vocabulary Builder - Learn English vocabulary with images, audio pronunciation, and interactive flashcards. Build your vocabulary through visual learning.">
+    <meta name="keywords" content="vocabulary, learn english, flashcards, visual learning, ESL, education">
+    <meta name="author" content="Visual Vocabulary Builder">
+    <meta name="robots" content="index, follow">
+    
     <title>Visual Vocabulary Builder - Learn English with Images & Audio</title>
     
     <!-- Fonts -->
@@ -12,12 +19,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* ============================================
+           RESET AND BASE STYLES
+           ============================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* CSS Custom Properties (Variables) */
         :root {
             --primary: #4A90E2;
             --secondary: #50E3C2;
@@ -34,18 +45,23 @@
             --border-dark: #444;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition-default: all 0.3s ease;
+            --border-radius-card: 24px;
+            --border-radius-button: 50px;
         }
 
+        /* Base Body Styles */
         body {
             font-family: 'Open Sans', sans-serif;
             background: var(--bg-light);
             color: var(--text-light);
-            transition: all 0.3s ease;
+            transition: var(--transition-default);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
+        /* Dark Mode Theme */
         body.dark-mode {
             background: var(--bg-dark);
             color: var(--text-dark);
@@ -81,10 +97,14 @@
             background: var(--card-dark);
         }
 
+        /* Typography */
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Poppins', sans-serif;
         }
 
+        /* ============================================
+           HEADER COMPONENT
+           ============================================ */
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             padding: 1rem 2rem;
@@ -111,6 +131,7 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
+        /* Navigation Buttons */
         .nav-buttons {
             display: flex;
             gap: 0.75rem;
@@ -138,7 +159,7 @@
             border-radius: 8px;
             color: white;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition-default);
         }
 
         .btn-icon:hover {
@@ -146,6 +167,9 @@
             transform: translateY(-2px);
         }
 
+        /* ============================================
+           MAIN CONTAINER
+           ============================================ */
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -153,6 +177,9 @@
             flex: 1;
         }
 
+        /* ============================================
+           SEARCH SECTION
+           ============================================ */
         .search-section {
             margin-bottom: 2rem;
         }
@@ -168,9 +195,9 @@
             padding: 1rem 1.5rem;
             font-size: 1rem;
             border: 2px solid var(--border-light);
-            border-radius: 50px;
+            border-radius: var(--border-radius-button);
             font-family: 'Open Sans', sans-serif;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             outline: none;
         }
 
@@ -184,10 +211,10 @@
             color: white;
             border: none;
             padding: 0 2rem;
-            border-radius: 50px;
+            border-radius: var(--border-radius-button);
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             font-size: 1rem;
         }
 
@@ -196,6 +223,7 @@
             transform: translateY(-2px);
         }
 
+        /* Search History */
         .search-history {
             display: flex;
             gap: 0.5rem;
@@ -208,7 +236,7 @@
             border-radius: 20px;
             font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             border: 1px solid var(--border-light);
         }
 
@@ -217,18 +245,28 @@
             color: white;
         }
 
+        /* ============================================
+           FLASHCARD COMPONENT
+           ============================================ */
         .flashcard {
             background: var(--card-light);
-            border-radius: 24px;
+            border-radius: var(--border-radius-card);
             overflow: hidden;
             box-shadow: var(--shadow-lg);
             margin-bottom: 2rem;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             display: none;
         }
 
         .flashcard.active {
             display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Fade In Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .flashcard-image {
@@ -261,6 +299,7 @@
             font-size: 1rem;
         }
 
+        /* Pronunciation Button */
         .pronounce-btn {
             background: var(--primary);
             color: white;
@@ -269,7 +308,7 @@
             height: 50px;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             margin: 1rem auto;
             display: flex;
             align-items: center;
@@ -281,6 +320,7 @@
             transform: scale(1.1);
         }
 
+        /* Definition Section */
         .definition-section {
             text-align: center;
             margin: 1.5rem 0;
@@ -291,6 +331,7 @@
             line-height: 1.6;
         }
 
+        /* Example Section */
         .example-section {
             background: rgba(74, 144, 226, 0.1);
             padding: 1.5rem;
@@ -301,6 +342,7 @@
             border-left: 4px solid var(--primary);
         }
 
+        /* Image Options Gallery */
         .image-options {
             display: flex;
             gap: 1rem;
@@ -313,7 +355,7 @@
             cursor: pointer;
             border-radius: 12px;
             overflow: hidden;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             border: 3px solid transparent;
             width: 100px;
             height: 100px;
@@ -333,6 +375,7 @@
             object-fit: cover;
         }
 
+        /* Flashcard Action Buttons */
         .flashcard-actions {
             display: flex;
             gap: 1rem;
@@ -340,13 +383,16 @@
             margin-top: 1.5rem;
         }
 
+        /* ============================================
+           BUTTON COMPONENTS
+           ============================================ */
         .btn {
             padding: 0.85rem 2rem;
             border: none;
-            border-radius: 50px;
+            border-radius: var(--border-radius-button);
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             font-size: 1rem;
         }
 
@@ -370,6 +416,18 @@
             transform: translateY(-2px);
         }
 
+        .btn-danger {
+            background: var(--error);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* ============================================
+           LIBRARY SECTION
+           ============================================ */
         .library-section {
             margin-top: 2rem;
             display: none;
@@ -377,6 +435,7 @@
 
         .library-section.active {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
 
         .section-title {
@@ -386,15 +445,6 @@
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
             gap: 1rem;
-        }
-
-        .btn-danger {
-            background: var(--error);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
         }
 
         .library-grid {
@@ -407,7 +457,7 @@
             background: var(--card-light);
             border-radius: 16px;
             overflow: hidden;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             cursor: pointer;
             border: 1px solid var(--border-light);
         }
@@ -456,6 +506,9 @@
             border: none;
         }
 
+        /* ============================================
+           PROFILE SECTION
+           ============================================ */
         .profile-section {
             display: none;
             text-align: center;
@@ -464,6 +517,7 @@
 
         .profile-section.active {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
 
         .stats-card {
@@ -479,6 +533,9 @@
             color: var(--primary);
         }
 
+        /* ============================================
+           BOTTOM NAVIGATION
+           ============================================ */
         .bottom-nav {
             background: var(--card-light);
             border-top: 1px solid var(--border-light);
@@ -506,7 +563,7 @@
             cursor: pointer;
             padding: 0.5rem;
             border-radius: 12px;
-            transition: all 0.3s;
+            transition: var(--transition-default);
             color: var(--text-light);
             font-size: 0.85rem;
         }
@@ -519,6 +576,9 @@
             color: var(--primary);
         }
 
+        /* ============================================
+           REVIEW MODAL
+           ============================================ */
         .review-mode {
             position: fixed;
             top: 0;
@@ -530,13 +590,14 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            animation: fadeIn 0.3s ease;
         }
 
         .review-card {
             background: white;
             max-width: 500px;
             width: 90%;
-            border-radius: 24px;
+            border-radius: var(--border-radius-card);
             padding: 2rem;
             text-align: center;
         }
@@ -562,6 +623,9 @@
             justify-content: center;
         }
 
+        /* ============================================
+           LOADING COMPONENT
+           ============================================ */
         .loading {
             text-align: center;
             padding: 3rem;
@@ -578,12 +642,15 @@
             to { transform: rotate(360deg); }
         }
 
+        /* ============================================
+           TOAST NOTIFICATION
+           ============================================ */
         .toast {
             position: fixed;
             bottom: 80px;
             right: 20px;
             padding: 0.75rem 1.5rem;
-            border-radius: 50px;
+            border-radius: var(--border-radius-button);
             animation: slideIn 0.3s ease;
             z-index: 1000;
             font-size: 0.9rem;
@@ -599,6 +666,9 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
+        /* ============================================
+           FOOTER
+           ============================================ */
         footer {
             text-align: center;
             padding: 1.5rem;
@@ -606,17 +676,55 @@
             font-size: 0.85rem;
         }
 
-        @media (max-width: 768px) {
-            .word { font-size: 1.8rem; }
-            .flashcard-content { padding: 1.5rem; }
-            .image-option { width: 80px; height: 80px; }
-            .library-grid { grid-template-columns: 1fr; }
+        /* ============================================
+           RESPONSIVE DESIGN (Mobile First)
+           ============================================ */
+        
+        /* Tablet Styles (768px and up) */
+        @media (min-width: 768px) {
+            .word { font-size: 2.2rem; }
+            .flashcard-image { height: 320px; }
         }
 
+        /* Desktop Styles (1024px and up) */
+        @media (min-width: 1024px) {
+            .flashcard {
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+            }
+            .flashcard-image {
+                width: 40%;
+                height: auto;
+                min-height: 400px;
+            }
+            .flashcard-content {
+                width: 60%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+        }
+
+        /* Mobile Styles (max-width: 768px) */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; text-align: center; }
+            .word { font-size: 1.8rem; }
+            .flashcard-content { padding: 1.5rem; }
+            .flashcard-image { height: 220px; }
+            .btn { padding: 0.7rem 1.5rem; font-size: 0.9rem; }
+            .image-option { width: 80px; height: 80px; }
+            .library-grid { grid-template-columns: 1fr; }
+            .section-title { flex-direction: column; text-align: center; }
+        }
+
+        /* Small Mobile (max-width: 480px) */
         @media (max-width: 480px) {
             .search-box { flex-direction: column; }
             .btn-search { padding: 0.75rem; }
+            .word { font-size: 1.5rem; }
             .flashcard-actions { flex-direction: column; }
+            .review-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -628,11 +736,11 @@
                 <p>Visual learning for new languages</p>
             </div>
             <div class="nav-buttons">
-                <select id="languageSelect" class="language-select">
+                <select id="languageSelect" class="language-select" aria-label="Select language">
                     <option value="pt">🇧🇷 Português</option>
                     <option value="en" selected>🇺🇸 English</option>
                 </select>
-                <button id="themeToggle" class="btn-icon">
+                <button id="themeToggle" class="btn-icon" aria-label="Toggle dark/light mode">
                     <i class="fas fa-moon"></i>
                 </button>
             </div>
@@ -642,23 +750,23 @@
     <div class="container">
         <div class="search-section">
             <div class="search-box">
-                <input type="text" id="searchInput" class="search-input" placeholder="Enter a word...">
-                <button id="searchBtn" class="btn-search">Search</button>
+                <input type="text" id="searchInput" class="search-input" placeholder="Enter a word..." aria-label="Word to search">
+                <button id="searchBtn" class="btn-search" aria-label="Search word">Search</button>
             </div>
-            <div id="searchHistory" class="search-history"></div>
+            <div id="searchHistory" class="search-history" aria-label="Search history"></div>
         </div>
 
-        <div id="flashcard" class="flashcard"></div>
+        <div id="flashcard" class="flashcard" aria-label="Word flashcard"></div>
 
-        <div id="librarySection" class="library-section">
+        <div id="librarySection" class="library-section" aria-label="Saved words library">
             <div class="section-title">
                 <h2><i class="fas fa-book"></i> My Library</h2>
-                <button id="clearLibraryBtn" class="btn-danger">Clear All</button>
+                <button id="clearLibraryBtn" class="btn-danger" aria-label="Clear all saved words">Clear All</button>
             </div>
             <div id="libraryGrid" class="library-grid"></div>
         </div>
 
-        <div id="profileSection" class="profile-section">
+        <div id="profileSection" class="profile-section" aria-label="User profile statistics">
             <h2><i class="fas fa-user"></i> My Profile</h2>
             <div class="stats-card">
                 <div class="stat-number" id="totalWordsLearned">0</div>
@@ -672,10 +780,10 @@
 
     <div class="bottom-nav">
         <div class="nav-menu">
-            <button class="nav-item active" data-section="home"><i class="fas fa-home"></i><span>Home</span></button>
-            <button class="nav-item" data-section="library"><i class="fas fa-book"></i><span>Library</span></button>
-            <button class="nav-item" data-section="review"><i class="fas fa-random"></i><span>Review</span></button>
-            <button class="nav-item" data-section="profile"><i class="fas fa-user"></i><span>Profile</span></button>
+            <button class="nav-item active" data-section="home" aria-label="Go to home"><i class="fas fa-home"></i><span>Home</span></button>
+            <button class="nav-item" data-section="library" aria-label="Go to library"><i class="fas fa-book"></i><span>Library</span></button>
+            <button class="nav-item" data-section="review" aria-label="Start review mode"><i class="fas fa-random"></i><span>Review</span></button>
+            <button class="nav-item" data-section="profile" aria-label="View profile"><i class="fas fa-user"></i><span>Profile</span></button>
         </div>
     </div>
 
@@ -683,45 +791,94 @@
         <p>© 2025 Visual Vocabulary Builder • Visual learning for new languages</p>
     </footer>
 
-    <div id="reviewModal" class="review-mode">
+    <div id="reviewModal" class="review-mode" aria-label="Review mode">
         <div class="review-card">
             <h2 class="review-word" id="reviewWord"></h2>
             <p class="review-definition" id="reviewDefinition"></p>
             <div class="review-buttons">
-                <button id="reviewWrong" class="btn btn-danger">❌ Wrong</button>
-                <button id="reviewCorrect" class="btn btn-primary">✅ Correct</button>
-                <button id="reviewClose" class="btn btn-secondary">Close</button>
+                <button id="reviewWrong" class="btn btn-danger" aria-label="Mark as wrong">❌ Wrong</button>
+                <button id="reviewCorrect" class="btn btn-primary" aria-label="Mark as correct">✅ Correct</button>
+                <button id="reviewClose" class="btn btn-secondary" aria-label="Close review">Close</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ============================================
-        // VISUAL VOCABULARY BUILDER - VERSÃO COMPLETA
-        // ============================================
+        /**
+         * ============================================
+         * VISUAL VOCABULARY BUILDER
+         * A web application for learning English vocabulary
+         * with images, audio pronunciation, and flashcards
+         * 
+         * @version 1.0.0
+         * @author Visual Vocabulary Builder
+         * @license MIT
+         * ============================================
+         */
         
-        // --- VARIÁVEIS GLOBAIS ---
-        let library = [];
-        let searchHistory = [];
-        let currentLanguage = 'en';
-        let currentWordData = null;
-        let currentImages = [];
-        let selectedImageUrl = '';
+        // ============================================
+        // GLOBAL STATE VARIABLES
+        // ============================================
+        let library = [];           // Array of saved flashcards
+        let searchHistory = [];     // Array of searched words (max 5)
+        let currentLanguage = 'en'; // Current UI language ('en' or 'pt')
+        let currentWordData = null; // Currently displayed word data
+        let currentImages = [];      // Array of image URLs for current word
+        let selectedImageUrl = '';   // Currently selected image URL
         
-        // --- CONSTANTES ---
+        // ============================================
+        // CONSTANTS & CONFIGURATION
+        // ============================================
         const DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
         const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400/4A90E2/white?text=No+Image+Available';
         
-        // Banco de imagens alternativas por categoria
-        const CATEGORY_IMAGES = {
-            animal: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'],
-            food: ['🍎', '🍕', '🍔', '🌮', '🥗', '🍣', '🍩', '🍪'],
-            nature: ['🌲', '🌳', '🌴', '🌵', '🌿', '🍃', '🍂', '🌸'],
-            color: ['🔴', '🔵', '🟢', '🟡', '🟠', '🟣', '⚫', '⚪'],
-            default: ['📖', '📚', '✏️', '📝', '💡', '🎯', '⭐', '💎']
-        };
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
         
-        // Frases de exemplo geradas dinamicamente quando a API não fornece
+        /**
+         * Displays a toast notification message
+         * @param {string} message - The message to display
+         * @param {string} type - The type of toast ('success', 'error', 'warning')
+         */
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = message;
+            toast.setAttribute('role', 'alert');
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        /**
+         * Shows loading state in a container
+         * @param {HTMLElement} container - Container to show loading in
+         */
+        function showLoading(container) {
+            if (container) {
+                container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin spinner"></i> Loading...</div>';
+                container.classList.add('active');
+            }
+        }
+        
+        /**
+         * Escapes HTML special characters to prevent XSS attacks
+         * @param {string} text - Text to escape
+         * @returns {string} Escaped HTML text
+         */
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        /**
+         * Generates a fallback example sentence when API doesn't provide one
+         * @param {string} word - The vocabulary word
+         * @param {string} definition - The word definition
+         * @returns {string} Generated example sentence
+         */
         function generateExampleSentence(word, definition) {
             const templates = [
                 `"${word}" is an important word to learn in English.`,
@@ -733,30 +890,15 @@
             return templates[Math.floor(Math.random() * templates.length)];
         }
         
-        // --- FUNÇÕES AUXILIARES ---
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = message;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
+        // ============================================
+        // API FUNCTIONS (External APIs)
+        // ============================================
         
-        function showLoading(container) {
-            if (container) {
-                container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin spinner"></i> Loading...</div>';
-                container.classList.add('active');
-            }
-        }
-        
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        // --- API FUNCTIONS ---
+        /**
+         * Fetches word definition from Free Dictionary API
+         * @param {string} word - Word to look up
+         * @returns {Promise<Object|null>} Word data or null if not found
+         */
         async function fetchDefinition(word) {
             try {
                 const response = await fetch(`${DICTIONARY_API}${word}`);
@@ -769,7 +911,7 @@
                 const phonetic = data[0].phonetic || '';
                 const partOfSpeech = meaning.partOfSpeech;
                 
-                // Se não houver exemplo, gerar um
+                // Generate example if API doesn't provide one
                 if (!example) {
                     example = generateExampleSentence(word, definition);
                 }
@@ -787,31 +929,44 @@
             }
         }
         
+        /**
+         * Fetches images for a word from multiple sources
+         * @param {string} word - Word to search images for
+         * @returns {Promise<string[]>} Array of image URLs
+         */
         async function fetchImages(word) {
             const imageUrls = [];
             
-            // Método 1: Unsplash (pode falhar por CORS)
+            // Method 1: Unsplash (may fail due to CORS)
             try {
                 const unsplashUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(word)}`;
                 imageUrls.push(unsplashUrl);
-            } catch (e) { console.log('Unsplash error:', e); }
+            } catch (e) {
+                console.log('Unsplash error:', e);
+            }
             
-            // Método 2: Placeholder com a palavra (sempre funciona)
+            // Method 2: Placeholder with the word (always works)
             imageUrls.push(`https://placehold.co/600x400/4A90E2/white?text=${encodeURIComponent(word)}`);
             
-            // Método 3: Imagem baseada em categoria (fallback)
+            // Method 3: Category-based placeholders (fallback)
             const categories = ['nature', 'animal', 'food', 'color'];
             for (let cat of categories) {
                 imageUrls.push(`https://placehold.co/600x400/50E3C2/white?text=${cat}+${encodeURIComponent(word)}`);
             }
             
-            return imageUrls.slice(0, 5); // Retorna até 5 opções
+            return imageUrls.slice(0, 5); // Return up to 5 options
         }
         
-        // --- SPEECH ---
+        // ============================================
+        // SPEECH SYNTHESIS (Web Speech API)
+        // ============================================
+        
+        /**
+         * Speaks a word using the browser's Web Speech API
+         * @param {string} word - Word to pronounce
+         */
         function speakWord(word) {
             if ('speechSynthesis' in window) {
-                // Cancela qualquer fala anterior
                 speechSynthesis.cancel();
                 
                 const utterance = new SpeechSynthesisUtterance(word);
@@ -819,7 +974,6 @@
                 utterance.rate = 0.9;
                 utterance.pitch = 1;
                 
-                // Aguarda um pouco para garantir que o cancelamento foi processado
                 setTimeout(() => {
                     speechSynthesis.speak(utterance);
                 }, 100);
@@ -828,7 +982,10 @@
             }
         }
         
-        // --- STORAGE ---
+        // ============================================
+        // LOCAL STORAGE FUNCTIONS
+        // ============================================
+        
         function saveLibrary() {
             localStorage.setItem('vocab_library', JSON.stringify(library));
         }
@@ -866,7 +1023,10 @@
             return localStorage.getItem('vocab_language') || 'en';
         }
         
-        // --- RENDER FUNCTIONS ---
+        // ============================================
+        // UI RENDER FUNCTIONS
+        // ============================================
+        
         function updateSearchHistoryUI() {
             const historyDiv = document.getElementById('searchHistory');
             if (!historyDiv) return;
@@ -877,7 +1037,7 @@
             }
             
             historyDiv.innerHTML = searchHistory.map(word => `
-                <div class="history-item" onclick="window.searchHistoryWord('${word}')">
+                <div class="history-item" onclick="window.searchHistoryWord('${word}')" role="button" tabindex="0">
                     ${escapeHtml(word)}
                 </div>
             `).join('');
@@ -891,6 +1051,12 @@
             updateSearchHistoryUI();
         }
         
+        /**
+         * Renders the flashcard with word data and images
+         * @param {Object} wordData - Word information
+         * @param {string[]} images - Array of image URLs
+         * @param {string} selectedImage - Currently selected image URL
+         */
         function renderFlashcard(wordData, images, selectedImage) {
             currentWordData = wordData;
             currentImages = images || [];
@@ -904,7 +1070,7 @@
                     <div class="word-section">
                         <h2 class="word">${escapeHtml(wordData.word)}</h2>
                         <div class="phonetic">${wordData.phonetic || ''}</div>
-                        <button id="speakBtn" class="pronounce-btn">
+                        <button id="speakBtn" class="pronounce-btn" aria-label="Pronounce ${wordData.word}">
                             <i class="fas fa-volume-up"></i>
                         </button>
                     </div>
@@ -916,16 +1082,16 @@
                     </div>
                     <div class="image-options">
                         ${displayImages.map((img, idx) => `
-                            <div class="image-option ${selectedImageUrl === img ? 'selected' : ''}" onclick="window.selectImage(${idx})">
-                                <img src="${img}" alt="Option ${idx + 1}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+                            <div class="image-option ${selectedImageUrl === img ? 'selected' : ''}" onclick="window.selectImage(${idx})" role="button" tabindex="0">
+                                <img src="${img}" alt="Image option ${idx + 1}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
                             </div>
                         `).join('')}
                     </div>
                     <div class="flashcard-actions">
-                        <button id="saveCardBtn" class="btn btn-primary">
+                        <button id="saveCardBtn" class="btn btn-primary" aria-label="Save word to library">
                             <i class="fas fa-save"></i> SAVE
                         </button>
-                        <button id="newWordBtn" class="btn btn-secondary">
+                        <button id="newWordBtn" class="btn btn-secondary" aria-label="Clear and search new word">
                             <i class="fas fa-plus"></i> NEW
                         </button>
                     </div>
@@ -959,16 +1125,16 @@
             }
             
             libraryGrid.innerHTML = library.map(card => `
-                <div class="library-card" onclick="window.viewWord('${escapeHtml(card.word)}')">
+                <div class="library-card" onclick="window.viewWord('${escapeHtml(card.word)}')" role="button" tabindex="0">
                     <img src="${card.imageUrl || PLACEHOLDER_IMAGE}" alt="${escapeHtml(card.word)}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
                     <div class="library-card-content">
                         <div class="library-word">${escapeHtml(card.word)}</div>
                         <div class="library-definition">${escapeHtml(card.definition.substring(0, 80))}...</div>
                         <div class="library-actions">
-                            <button onclick="event.stopPropagation(); window.removeFromLibrary('${card.id}')">
+                            <button onclick="event.stopPropagation(); window.removeFromLibrary('${card.id}')" aria-label="Remove ${card.word} from library">
                                 <i class="fas fa-trash"></i> Remove
                             </button>
-                            <button onclick="event.stopPropagation(); window.speakWord('${escapeHtml(card.word)}')">
+                            <button onclick="event.stopPropagation(); window.speakWord('${escapeHtml(card.word)}')" aria-label="Pronounce ${card.word}">
                                 <i class="fas fa-volume-up"></i> Listen
                             </button>
                         </div>
@@ -988,7 +1154,10 @@
             }
         }
         
-        // --- FUNÇÕES PRINCIPAIS ---
+        // ============================================
+        // CORE APPLICATION FUNCTIONS
+        // ============================================
+        
         window.selectImage = function(index) {
             if (currentImages && currentImages[index]) {
                 selectedImageUrl = currentImages[index];
@@ -996,6 +1165,9 @@
             }
         };
         
+        /**
+         * Searches for a word using external APIs
+         */
         async function searchWord() {
             const searchInput = document.getElementById('searchInput');
             const word = searchInput?.value.trim().toLowerCase();
@@ -1091,7 +1263,10 @@
             }
         }
         
-        // --- REVIEW SYSTEM ---
+        // ============================================
+        // REVIEW SYSTEM (Spaced Repetition)
+        // ============================================
+        
         let reviewQueue = [];
         let reviewIndex = 0;
         
@@ -1145,7 +1320,10 @@
             reviewIndex = 0;
         }
         
-        // --- MENSAGENS POR IDIOMA ---
+        // ============================================
+        // INTERNATIONALIZATION (i18n)
+        // ============================================
+        
         const MESSAGES = {
             en: {
                 searchPlaceholder: 'Enter a word...',
@@ -1173,7 +1351,10 @@
             }
         };
         
-        // --- NAVEGAÇÃO ---
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        
         function navigateTo(section) {
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
@@ -1200,7 +1381,10 @@
             if (section === 'review') startReview();
         }
         
-        // --- TEMA ---
+        // ============================================
+        // THEME MANAGEMENT (Dark/Light Mode)
+        // ============================================
+        
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
@@ -1225,7 +1409,10 @@
             }
         }
         
-        // --- IDIOMA ---
+        // ============================================
+        // LANGUAGE MANAGEMENT
+        // ============================================
+        
         function changeLanguage(e) {
             currentLanguage = e.target.value;
             saveLanguage(currentLanguage);
@@ -1239,19 +1426,25 @@
             }
         }
         
-        // --- INICIALIZAÇÃO ---
+        // ============================================
+        // APPLICATION INITIALIZATION
+        // ============================================
+        
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 Aplicação inicializada!');
+            console.log('🚀 Visual Vocabulary Builder initialized');
             
+            // Load data from localStorage
             loadLibrary();
             loadSearchHistory();
             currentLanguage = loadLanguage();
             applyTheme();
             applyLanguage();
             
+            // Set language selector value
             const langSelect = document.getElementById('languageSelect');
             if (langSelect) langSelect.value = currentLanguage;
             
+            // Set up event listeners
             const searchBtn = document.getElementById('searchBtn');
             const searchInput = document.getElementById('searchInput');
             const themeToggle = document.getElementById('themeToggle');
@@ -1272,13 +1465,17 @@
             if (reviewWrong) reviewWrong.addEventListener('click', () => reviewAnswer(false));
             if (reviewClose) reviewClose.addEventListener('click', closeReviewModal);
             
+            // Navigation event listeners
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => navigateTo(item.dataset.section));
             });
             
+            // Expose functions globally for inline handlers
             window.speakWord = speakWord;
+            window.searchWord = searchWord;
+            window.navigateTo = navigateTo;
             
-            console.log('✅ Tudo pronto! Digite uma palavra e clique em Search.');
+            console.log('✅ Application ready! Search for a word to begin.');
         });
     </script>
 </body>
