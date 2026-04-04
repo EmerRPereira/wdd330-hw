@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Visual Vocabulary Builder - Learn English with Images & Audio</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4A90E2;
+            --secondary: #50E3C2;
+            --accent: #F5A623;
+            --success: #27AE60;
+            --error: #E74C3C;
+            --bg-light: #FFFFFF;
+            --text-light: #2C3E50;
+            --card-light: #F8F9FA;
+            --border-light: #E0E0E0;
+            --bg-dark: #1A1A2E;
+            --text-dark: #ECF0F1;
+            --card-dark: #2D2D44;
+            --border-dark: #444;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .flashcard,
+        body.dark-mode .library-card,
+        body.dark-mode .stats-card {
+            background: var(--card-dark);
+        }
+
+        body.dark-mode .search-input {
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
+        }
+
+        body.dark-mode .bottom-nav {
+            background: var(--card-dark);
+            border-top-color: var(--border-dark);
+        }
+
+        body.dark-mode .nav-item {
+            color: var(--text-dark);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .language-select {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .language-select option {
+            color: var(--text-light);
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 50px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-search:hover {
+            background: #357ABD;
+            transform: translateY(-2px);
+        }
+
+        .search-history {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .history-item {
+            background: var(--card-light);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--border-light);
+        }
+
+        .history-item:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        body.dark-mode .history-item {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        /* Flashcard */
+        .flashcard {
+            background: var(--card-light);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            display: none;
+        }
+
+        .flashcard.active {
+            display: block;
+        }
+
+        .flashcard-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .flashcard-content {
+            padding: 2rem;
+        }
+
+        .word-section {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .word {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .phonetic {
+            font-family: 'Roboto Mono', monospace;
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
+        .pronounce-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .pronounce-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .definition-section {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .definition-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .example-section {
+            background: rgba(74, 144, 226, 0.1);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            font-style: italic;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .image-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .image-option {
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            width: 100px;
+            height: 100px;
+        }
+
+        .image-option:hover {
+            transform: scale(1.05);
+        }
+
+        .image-option.selected {
+            border-color: var(--primary);
+        }
+
+        .image-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .flashcard-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #357ABD;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #3bc2a4;
+            transform: translateY(-2px);
+        }
+
+        /* Library Section */
+        .library-section {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .library-section.active {
+            display: block;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .library-card {
+            background: var(--card-light);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid var(--border-light);
+        }
+
+        .library-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .library-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .library-card-content {
+            padding: 1rem;
+        }
+
+        .library-word {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .library-definition {
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .library-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .library-actions button {
+            background: var(--primary);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .profile-section.active {
+            display: block;
+        }
+
+        .stats-card {
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: var(--card-light);
+            border-top: 1px solid var(--border-light);
+            padding: 0.75rem 1rem;
+            position: sticky;
+            bottom: 0;
+            margin-top: auto;
+        }
+
+        .nav-menu {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .nav-item i {
+            font-size: 1.5rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        /* Review Modal */
+        .review-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .review-card {
+            background: white;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        body.dark-mode .review-card {
+            background: var(--card-dark);
+        }
+
+        .review-word {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .review-definition {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .review-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--error); }
+        .toast.warning { background: var(--accent); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--card-light);
+            font-size: 0.85rem;
+        }
+
+        body.dark-mode footer {
+            background: var(--card-dark);
+        }
+
+        @media (max-width: 768px) {
+            .word { font-size: 1.8rem; }
+            .flashcard-content { padding: 1.5rem; }
+            .image-option { width: 80px; height: 80px; }
+            .library-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .search-box { flex-direction: column; }
+            .btn-search { padding: 0.75rem; }
+            .flashcard-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>📚 VOCAB BUILDER</h1>
+                <p>Visual learning for new languages</p>
+            </div>
+            <div class="nav-buttons">
+                <select id="languageSelect" class="language-select">
+                    <option value="pt">🇧🇷 Português</option>
+                    <option value="en" selected>🇺🇸 English</option>
+                </select>
+                <button id="themeToggle" class="btn-icon">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="Enter a word...">
+                <button id="searchBtn" class="btn-search">Search</button>
+            </div>
+            <div id="searchHistory" class="search-history"></div>
+        </div>
+
+        <div id="flashcard" class="flashcard"></div>
+
+        <div id="librarySection" class="library-section">
+            <div class="section-title">
+                <h2><i class="fas fa-book"></i> My Library</h2>
+                <button id="clearLibraryBtn" class="btn-icon btn-danger">Clear All</button>
+            </div>
+            <div id="libraryGrid" class="library-grid"></div>
+        </div>
+
+        <div id="profileSection" class="profile-section">
+            <h2><i class="fas fa-user"></i> My Profile</h2>
+            <div class="stats-card">
+                <div class="stat-number" id="totalWordsLearned">0</div>
+                <p>Words Learned</p>
+                <hr style="margin: 1rem 0;">
+                <div class="stat-number" id="reviewCount">0</div>
+                <p>Total Reviews</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-menu">
+            <button class="nav-item active" data-section="home"><i class="fas fa-home"></i><span>Home</span></button>
+            <button class="nav-item" data-section="library"><i class="fas fa-book"></i><span>Library</span></button>
+            <button class="nav-item" data-section="review"><i class="fas fa-random"></i><span>Review</span></button>
+            <button class="nav-item" data-section="profile"><i class="fas fa-user"></i><span>Profile</span></button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Visual Vocabulary Builder • Visual learning for new languages</p>
+    </footer>
+
+    <div id="reviewModal" class="review-mode">
+        <div class="review-card">
+            <h2 class="review-word" id="reviewWord"></h2>
+            <p class="review-definition" id="reviewDefinition"></p>
+            <div class="review-buttons">
+                <button id="reviewWrong" class="btn btn-danger">❌ Wrong</button>
+                <button id="reviewCorrect" class="btn btn-primary">✅ Correct</button>
+                <button id="reviewClose" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // VISUAL VOCABULARY BUILDER - VERSÃO FUNCIONAL
+        // ============================================
+        
+        // --- VARIÁVEIS GLOBAIS ---
+        let library = [];
+        let searchHistory = [];
+        let currentLanguage = 'en';
+        let currentWordData = null;
+        let currentImages = [];
+        let selectedImageUrl = '';
+        
+        // --- CONSTANTES ---
+        const DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
+        const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400/4A90E2/white?text=No+Image+Available';
+        
+        const MESSAGES = {
+            en: {
+                searchPlaceholder: 'Enter a word...',
+                wordNotFound: 'Word not found. Try another word!',
+                saveSuccess: 'Word saved to library!',
+                alreadyExists: 'This word is already in your library!',
+                removeSuccess: 'Word removed from library',
+                libraryCleared: 'Library cleared',
+                emptyLibrary: 'No words to review. Save some words first!',
+                reviewComplete: 'Review completed! Great job! 🎉',
+                correct: 'Correct! 🎯',
+                wrong: 'Keep practicing! 📚'
+            },
+            pt: {
+                searchPlaceholder: 'Digite uma palavra...',
+                wordNotFound: 'Palavra não encontrada. Tente outra palavra!',
+                saveSuccess: 'Palavra salva na biblioteca!',
+                alreadyExists: 'Esta palavra já está na sua biblioteca!',
+                removeSuccess: 'Palavra removida da biblioteca',
+                libraryCleared: 'Biblioteca limpa',
+                emptyLibrary: 'Nenhuma palavra para revisar. Salve algumas palavras primeiro!',
+                reviewComplete: 'Revisão concluída! Ótimo trabalho! 🎉',
+                correct: 'Correto! 🎯',
+                wrong: 'Continue praticando! 📚'
+            }
+        };
+        
+        // --- FUNÇÕES AUXILIARES ---
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        function showLoading(container) {
+            if (container) {
+                container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin spinner"></i> Loading...</div>';
+                container.classList.add('active');
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // --- API FUNCTIONS ---
+        async function fetchDefinition(word) {
+            try {
+                const response = await fetch(`${DICTIONARY_API}${word}`);
+                if (!response.ok) throw new Error('Word not found');
+                const data = await response.json();
+                
+                const meaning = data[0].meanings[0];
+                const definition = meaning.definitions[0].definition;
+                const example = meaning.definitions[0].example || 'No example available.';
+                const phonetic = data[0].phonetic || '';
+                const partOfSpeech = meaning.partOfSpeech;
+                
+                return {
+                    word: data[0].word,
+                    definition: `${partOfSpeech}: ${definition}`,
+                    phonetic: phonetic,
+                    example: example,
+                    partOfSpeech: partOfSpeech
+                };
+            } catch (error) {
+                console.error('Dictionary API error:', error);
+                return null;
+            }
+        }
+        
+        async function fetchImages(word) {
+            try {
+                // Usando Unsplash Source (mais confiável e sem CORS)
+                return [`https://source.unsplash.com/400x300/?${encodeURIComponent(word)}`];
+            } catch (error) {
+                console.error('Image fetch error:', error);
+                return [];
+            }
+        }
+        
+        // --- SPEECH ---
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                speechSynthesis.cancel();
+                speechSynthesis.speak(utterance);
+            } else {
+                showToast('Speech not supported', 'error');
+            }
+        }
+        
+        // --- STORAGE ---
+        function saveLibrary() {
+            localStorage.setItem('vocab_library', JSON.stringify(library));
+        }
+        
+        function loadLibrary() {
+            const saved = localStorage.getItem('vocab_library');
+            library = saved ? JSON.parse(saved) : [];
+            updateProfileStats();
+            renderLibrary();
+        }
+        
+        function saveSearchHistory() {
+            localStorage.setItem('vocab_history', JSON.stringify(searchHistory));
+        }
+        
+        function loadSearchHistory() {
+            const saved = localStorage.getItem('vocab_history');
+            searchHistory = saved ? JSON.parse(saved) : [];
+            updateSearchHistoryUI();
+        }
+        
+        function saveTheme(theme) {
+            localStorage.setItem('vocab_theme', theme);
+        }
+        
+        function loadTheme() {
+            return localStorage.getItem('vocab_theme') || 'light';
+        }
+        
+        function saveLanguage(lang) {
+            localStorage.setItem('vocab_language', lang);
+        }
+        
+        function loadLanguage() {
+            return localStorage.getItem('vocab_language') || 'en';
+        }
+        
+        // --- RENDER FUNCTIONS ---
+        function updateSearchHistoryUI() {
+            const historyDiv = document.getElementById('searchHistory');
+            if (!historyDiv) return;
+            
+            if (searchHistory.length === 0) {
+                historyDiv.innerHTML = '';
+                return;
+            }
+            
+            historyDiv.innerHTML = searchHistory.map(word => `
+                <div class="history-item" onclick="window.searchHistoryWord('${word}')">
+                    ${escapeHtml(word)}
+                </div>
+            `).join('');
+        }
+        
+        function addToSearchHistory(word) {
+            searchHistory = searchHistory.filter(w => w !== word);
+            searchHistory.unshift(word);
+            if (searchHistory.length > 5) searchHistory.pop();
+            saveSearchHistory();
+            updateSearchHistoryUI();
+        }
+        
+        function renderFlashcard(wordData, images, selectedImage) {
+            currentWordData = wordData;
+            currentImages = images || [];
+            selectedImageUrl = selectedImage || (images && images[0]) || PLACEHOLDER_IMAGE;
+            
+            const displayImages = currentImages.length > 0 ? currentImages : [PLACEHOLDER_IMAGE];
+            
+            const flashcardHtml = `
+                <img src="${selectedImageUrl}" alt="${wordData.word}" class="flashcard-image" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+                <div class="flashcard-content">
+                    <div class="word-section">
+                        <h2 class="word">${escapeHtml(wordData.word)}</h2>
+                        <div class="phonetic">${wordData.phonetic || ''}</div>
+                        <button id="speakBtn" class="pronounce-btn">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div class="definition-section">
+                        <p class="definition-text">${escapeHtml(wordData.definition)}</p>
+                    </div>
+                    <div class="example-section">
+                        <i class="fas fa-quote-left"></i> "${escapeHtml(wordData.example)}"
+                    </div>
+                    <div class="image-options">
+                        ${displayImages.map((img, idx) => `
+                            <div class="image-option ${selectedImageUrl === img ? 'selected' : ''}" onclick="window.selectImage(${idx})">
+                                <img src="${img}" alt="Option ${idx + 1}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="flashcard-actions">
+                        <button id="saveCardBtn" class="btn btn-primary">
+                            <i class="fas fa-save"></i> SAVE
+                        </button>
+                        <button id="newWordBtn" class="btn btn-secondary">
+                            <i class="fas fa-plus"></i> NEW
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            const flashcardContainer = document.getElementById('flashcard');
+            flashcardContainer.innerHTML = flashcardHtml;
+            flashcardContainer.classList.add('active');
+            
+            document.getElementById('speakBtn')?.addEventListener('click', () => speakWord(wordData.word));
+            document.getElementById('saveCardBtn')?.addEventListener('click', saveToLibrary);
+            document.getElementById('newWordBtn')?.addEventListener('click', () => {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('searchInput').focus();
+            });
+        }
+        
+        function renderLibrary() {
+            const libraryGrid = document.getElementById('libraryGrid');
+            if (!libraryGrid) return;
+            
+            if (library.length === 0) {
+                libraryGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">✨ No words saved yet. Search and save words to build your vocabulary! ✨</p>';
+                return;
+            }
+            
+            libraryGrid.innerHTML = library.map(card => `
+                <div class="library-card" onclick="window.viewWord('${escapeHtml(card.word)}')">
+                    <img src="${card.imageUrl || PLACEHOLDER_IMAGE}" alt="${escapeHtml(card.word)}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+                    <div class="library-card-content">
+                        <div class="library-word">${escapeHtml(card.word)}</div>
+                        <div class="library-definition">${escapeHtml(card.definition.substring(0, 80))}...</div>
+                        <div class="library-actions">
+                            <button onclick="event.stopPropagation(); window.removeFromLibrary('${card.id}')">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                            <button onclick="event.stopPropagation(); window.speakWord('${escapeHtml(card.word)}')">
+                                <i class="fas fa-volume-up"></i> Listen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateProfileStats() {
+            const totalWords = document.getElementById('totalWordsLearned');
+            const reviewCount = document.getElementById('reviewCount');
+            
+            if (totalWords) totalWords.textContent = library.length;
+            if (reviewCount) {
+                const totalReviews = library.reduce((sum, card) => sum + (card.reviewCount || 0), 0);
+                reviewCount.textContent = totalReviews;
+            }
+        }
+        
+        // --- FUNÇÕES PRINCIPAIS ---
+        window.selectImage = function(index) {
+            if (currentImages && currentImages[index]) {
+                selectedImageUrl = currentImages[index];
+                renderFlashcard(currentWordData, currentImages, selectedImageUrl);
+            }
+        };
+        
+        async function searchWord() {
+            const searchInput = document.getElementById('searchInput');
+            const word = searchInput?.value.trim().toLowerCase();
+            
+            if (!word) {
+                showToast('Please enter a word to search', 'error');
+                return;
+            }
+            
+            const flashcardContainer = document.getElementById('flashcard');
+            showLoading(flashcardContainer);
+            
+            try {
+                const definition = await fetchDefinition(word);
+                if (!definition) {
+                    showToast(MESSAGES[currentLanguage]?.wordNotFound || MESSAGES.en.wordNotFound, 'error');
+                    flashcardContainer.innerHTML = '';
+                    flashcardContainer.classList.remove('active');
+                    return;
+                }
+                
+                const images = await fetchImages(word);
+                const selectedImage = images.length > 0 ? images[0] : null;
+                
+                renderFlashcard(definition, images, selectedImage);
+                addToSearchHistory(word);
+                
+            } catch (error) {
+                console.error('Search error:', error);
+                showToast('Error searching word. Please try again.', 'error');
+                flashcardContainer.innerHTML = '';
+                flashcardContainer.classList.remove('active');
+            }
+        }
+        
+        function saveToLibrary() {
+            if (!currentWordData) {
+                showToast('No word to save', 'error');
+                return;
+            }
+            
+            const exists = library.some(item => item.word === currentWordData.word);
+            if (exists) {
+                showToast(MESSAGES[currentLanguage]?.alreadyExists || MESSAGES.en.alreadyExists, 'warning');
+                return;
+            }
+            
+            const flashcard = {
+                id: `${currentWordData.word}_${Date.now()}`,
+                word: currentWordData.word,
+                definition: currentWordData.definition,
+                phonetic: currentWordData.phonetic,
+                example: currentWordData.example,
+                imageUrl: selectedImageUrl,
+                createdAt: new Date().toISOString(),
+                reviewCount: 0,
+                lastReviewed: null
+            };
+            
+            library.unshift(flashcard);
+            saveLibrary();
+            renderLibrary();
+            updateProfileStats();
+            showToast(MESSAGES[currentLanguage]?.saveSuccess || MESSAGES.en.saveSuccess, 'success');
+        }
+        
+        window.removeFromLibrary = function(id) {
+            library = library.filter(card => card.id !== id);
+            saveLibrary();
+            renderLibrary();
+            updateProfileStats();
+            showToast(MESSAGES[currentLanguage]?.removeSuccess || MESSAGES.en.removeSuccess, 'success');
+        };
+        
+        window.viewWord = async function(word) {
+            document.getElementById('searchInput').value = word;
+            navigateTo('home');
+            await searchWord();
+        };
+        
+        window.searchHistoryWord = async function(word) {
+            document.getElementById('searchInput').value = word;
+            await searchWord();
+        };
+        
+        function clearLibrary() {
+            if (confirm('Are you sure you want to clear your entire library?')) {
+                library = [];
+                saveLibrary();
+                renderLibrary();
+                updateProfileStats();
+                showToast(MESSAGES[currentLanguage]?.libraryCleared || MESSAGES.en.libraryCleared, 'success');
+            }
+        }
+        
+        // --- REVIEW SYSTEM ---
+        let reviewQueue = [];
+        let reviewIndex = 0;
+        
+        function startReview() {
+            if (library.length === 0) {
+                showToast(MESSAGES[currentLanguage]?.emptyLibrary || MESSAGES.en.emptyLibrary, 'warning');
+                return;
+            }
+            
+            reviewQueue = [...library];
+            reviewIndex = 0;
+            showNextReview();
+        }
+        
+        function showNextReview() {
+            if (reviewIndex >= reviewQueue.length) {
+                closeReviewModal();
+                showToast(MESSAGES[currentLanguage]?.reviewComplete || MESSAGES.en.reviewComplete, 'success');
+                updateProfileStats();
+                return;
+            }
+            
+            const card = reviewQueue[reviewIndex];
+            document.getElementById('reviewWord').textContent = card.word;
+            document.getElementById('reviewDefinition').textContent = card.definition;
+            document.getElementById('reviewModal').style.display = 'flex';
+        }
+        
+        function reviewAnswer(isCorrect) {
+            const card = reviewQueue[reviewIndex];
+            
+            if (isCorrect) {
+                card.reviewCount = (card.reviewCount || 0) + 1;
+                card.lastReviewed = new Date().toISOString();
+                const index = library.findIndex(item => item.id === card.id);
+                if (index !== -1) library[index] = card;
+                saveLibrary();
+                showToast(MESSAGES[currentLanguage]?.correct || MESSAGES.en.correct, 'success');
+            } else {
+                showToast(MESSAGES[currentLanguage]?.wrong || MESSAGES.en.wrong, 'warning');
+                reviewQueue.push(card);
+            }
+            
+            reviewIndex++;
+            showNextReview();
+        }
+        
+        function closeReviewModal() {
+            document.getElementById('reviewModal').style.display = 'none';
+            reviewQueue = [];
+            reviewIndex = 0;
+        }
+        
+        // --- NAVEGAÇÃO ---
+        function navigateTo(section) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const activeItem = document.querySelector(`.nav-item[data-section="${section}"]`);
+            if (activeItem) activeItem.classList.add('active');
+            
+            const flashcard = document.getElementById('flashcard');
+            const librarySection = document.getElementById('librarySection');
+            const profileSection = document.getElementById('profileSection');
+            
+            if (flashcard) flashcard.style.display = section === 'home' ? 'block' : 'none';
+            if (librarySection) librarySection.classList.toggle('active', section === 'library');
+            if (profileSection) profileSection.classList.toggle('active', section === 'profile');
+            
+            if (section === 'library') renderLibrary();
+            if (section === 'profile') updateProfileStats();
+            if (section === 'review') startReview();
+        }
+        
+        // --- TEMA ---
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            saveTheme(theme);
+            
+            const icon = document.querySelector('#themeToggle i');
+            if (icon) {
+                icon.classList.remove(theme === 'dark' ? 'fa-moon' : 'fa-sun');
+                icon.classList.add(theme === 'dark' ? 'fa-sun' : 'fa-moon');
+            }
+        }
+        
+        function applyTheme() {
+            const theme = loadTheme();
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                const icon = document.querySelector('#themeToggle i');
+                if (icon) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                }
+            }
+        }
+        
+        // --- IDIOMA ---
+        function changeLanguage(e) {
+            currentLanguage = e.target.value;
+            saveLanguage(currentLanguage);
+            applyLanguage();
+        }
+        
+        function applyLanguage() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.placeholder = MESSAGES[currentLanguage]?.searchPlaceholder || MESSAGES.en.searchPlaceholder;
+            }
+        }
+        
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Aplicação inicializada!');
+            
+            loadLibrary();
+            loadSearchHistory();
+            currentLanguage = loadLanguage();
+            applyTheme();
+            applyLanguage();
+            
+            document.getElementById('languageSelect').value = currentLanguage;
+            
+            document.getElementById('searchBtn').addEventListener('click', searchWord);
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') searchWord();
+            });
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('languageSelect').addEventListener('change', changeLanguage);
+            document.getElementById('clearLibraryBtn').addEventListener('click', clearLibrary);
+            
+            document.getElementById('reviewCorrect').addEventListener('click', () => reviewAnswer(true));
+            document.getElementById('reviewWrong').addEventListener('click', () => reviewAnswer(false));
+            document.getElementById('reviewClose').addEventListener('click', closeReviewModal);
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => navigateTo(item.dataset.section));
+            });
+            
+            window.speakWord = speakWord;
+            
+            console.log('✅ Tudo pronto! Digite uma palavra e clique em Search.');
+        });
+    </script>
+</body>
+</html>
