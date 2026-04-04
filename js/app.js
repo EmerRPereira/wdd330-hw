@@ -116,26 +116,63 @@ async function fetchDefinition(word) {
 }
 
 /**
- * CORREÇÃO DAS IMAGENS - Usando múltiplas fontes que funcionam sem CORS
+ * Fetches images for a word from Pexels API (imagens reais e relevantes)
+ * @param {string} word - Word to search images for
+ * @returns {Promise<string[]>} Array of image URLs
  */
 async function fetchImages(word) {
     const imageUrls = [];
     
-    // Método 1: Lorem Picsum (sempre funciona, sem CORS)
-    // Gera uma imagem aleatória com seed baseada na palavra
-    const seed = encodeURIComponent(word).replace(/[^a-zA-Z0-9]/g, '');
-    imageUrls.push(`https://picsum.photos/seed/${seed || 'random'}/400/300`);
+    // SUA API KEY DO PEXELS (cadastre-se gratuitamente em pexels.com/api)
+    const PEXELS_API_KEY = 'UfV9Zd2dAL7RT4soWeuUtHVNbMjMk3Wz7VG6YMkVz1uCgkXEvgXaOtDR';
     
-    // Método 2: Placehold.co com a palavra (sempre funciona)
-    imageUrls.push(`https://placehold.co/600x400/4A90E2/white?text=${encodeURIComponent(word)}`);
+    try {
+        // Tentativa 1: Pexels API (imagens reais relacionadas à palavra)
+        const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(word)}&per_page=5`;
+        
+        const response = await fetch(pexelsUrl, {
+            headers: {
+                'Authorization': PEXELS_API_KEY
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.photos && data.photos.length > 0) {
+                // Adiciona as imagens do Pexels
+                data.photos.forEach(photo => {
+                    imageUrls.push(photo.src.medium);
+                });
+                console.log(`✅ Pexels: ${data.photos.length} imagens encontradas para "${word}"`);
+            } else {
+                console.log(`⚠️ Pexels: Nenhuma imagem encontrada para "${word}"`);
+            }
+        } else {
+            console.log(`⚠️ Pexels API error: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Pexels API error:', error);
+    }
     
-    // Método 3: Imagem de categoria baseada na primeira letra
-    const categories = ['nature', 'animal', 'food', 'technology', 'people'];
-    const randomCat = categories[Math.floor(Math.random() * categories.length)];
-    imageUrls.push(`https://picsum.photos/seed/${randomCat}_${seed}/400/300`);
-    
-    // Método 4: Cloudimage (fallback)
-    imageUrls.push(`https://picsum.photos/400/300?grayscale&seed=${seed}`);
+    // Se não conseguiu imagens do Pexels, usa fallbacks
+    if (imageUrls.length === 0) {
+        // Fallback 1: Unsplash Source (pode ter CORS, mas tenta)
+        imageUrls.push(`https://source.unsplash.com/featured/400x300/?${encodeURIComponent(word)}`);
+        
+        // Fallback 2: Placeholder com a palavra
+        imageUrls.push(`https://placehold.co/600x400/4A90E2/white?text=${encodeURIComponent(word)}+(no+image)`);
+        
+        // Fallback 3: Imagem ilustrativa por categoria
+        const categories = {
+            animal: '🐶🐱🐭',
+            food: '🍎🍕🍔',
+            nature: '🌲🌳🌴',
+            people: '👤👥👪',
+            technology: '💻📱🖥️'
+        };
+        const randomCat = Object.keys(categories)[Math.floor(Math.random() * Object.keys(categories).length)];
+        imageUrls.push(`https://placehold.co/600x400/50E3C2/white?text=${randomCat}+${encodeURIComponent(word)}`);
+    }
     
     return imageUrls.slice(0, 5);
 }
