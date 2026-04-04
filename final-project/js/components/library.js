@@ -1,8 +1,6 @@
 import { speakWord } from '../services/speech.js';
 import { truncateText } from '../utils/helpers.js';
 import { PLACEHOLDER_IMAGE } from '../config/constants.js';
-import { speakWord } from '../services/speech.js';
-import { truncateText } from '../utils/helpers.js';
 
 let library = [];
 let onRemoveCallback = null;
@@ -52,7 +50,6 @@ export function renderLibrary() {
     `).join('');
 }
 
-// Adicionar função escapeHtml
 function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');
@@ -60,7 +57,6 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Make handlers available globally
 window.viewWordHandler = (word) => {
     if (onViewCallback) onViewCallback(word);
 };

@@ -9,6 +9,35 @@ import { renderLibrary, setLibraryData, getLibraryData, setLibraryCallbacks } fr
 import { startReviewMode, setReviewCallbacks } from './components/review.js';
 import { updateSearchHistoryUI, addToSearchHistory, setSearchCallbacks } from './components/search.js';
 
+// No início do arquivo, após os imports
+console.log('🚀 main.js carregado com sucesso!');
+console.log('Módulos importados:', {
+    fetchDefinition: typeof fetchDefinition,
+    fetchImages: typeof fetchImages,
+    renderFlashcard: typeof renderFlashcard
+});
+
+// No DOMContentLoaded, adicione:
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🎯 DOM completamente carregado!');
+    console.log('Elementos encontrados:', {
+        searchBtn: document.getElementById('searchBtn'),
+        searchInput: document.getElementById('searchInput'),
+        themeToggle: document.getElementById('themeToggle'),
+        languageSelect: document.getElementById('languageSelect')
+    });
+    
+    loadData();
+    setupEventListeners();
+    setupCallbacks();
+    applyTheme();
+    applyLanguage();
+    updateUI();
+    
+    console.log('✅ Inicialização completa!');
+});
+
+
 // Global State
 let library = [];
 let searchHistory = [];
